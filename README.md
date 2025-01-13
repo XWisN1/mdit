@@ -15,7 +15,7 @@
   
   mv contain_http_md_files mdit/
   
-  python move_images.py
+  python mdit.py
   ```
 
 #### 3.参数解析：
