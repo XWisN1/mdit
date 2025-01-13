@@ -18,10 +18,13 @@ class ImageHandler:
                 # 使用正则表达式匹配整个Markdown图片行
                 md_image_lines = re.findall(r'(!\[.*?\]\(.*?\))', content)
                 # 过滤出以指定图片类型结尾的图片行
+                # 过滤出以指定图片类型结尾的图片行，或括号内以 http/https 开头的行
                 filtered_md_image_lines = [
                     line for line in md_image_lines
                     if any(re.search(r'\((.*?)\)', line).group(1).endswith(img_type) for img_type in self.image_types)
-                ]
+                    or re.search(r'\((.*?)\)', line).group(1).startswith(('http://', 'https://'))  # 新增逻辑
+]
+
                 # 仅当filtered_md_image_lines非空时，才添加到image_info列表
                 if filtered_md_image_lines:
                     image_info.append({'md_file_path': md_file, 'md_images_lines': filtered_md_image_lines})
@@ -117,20 +120,3 @@ class ImageHandler:
         return None
 
 # 示例用法
-if __name__ == "__main__":
-    md_files = [
-        'D:\\game\\xiao_tools\\POC-main\\Apache\\Apache ActiveMQ远程命令执行漏洞.md',
-        'D:\\game\\xiao_tools\\POC-main\\README.md',
-        'D:\\game\\xiao_tools\\POC-main\\Nginx\\Nginx安全漏洞.md',
-        'D:\\game\\xiao_tools\\POC-main\\Nginx\\README.md',
-        'D:\\game\\xiao_tools\\POC-main\\Tomcat\\Tomcat安全漏洞.md'
-    ]
-    image_types = ['.jpg', '.png', '.gif']
-    handler = ImageHandler(md_files, image_types)
-    processed_network_images, processed_local_absolute_images, processed_local_relative_images = handler.process_images(readme_files=[
-        'D:\\game\\xiao_tools\\POC-main\\README.md',
-        'D:\\game\\xiao_tools\\POC-main\\Nginx\\README.md'
-    ])
-    print(f"Processed Network Images (First 2): {processed_network_images[0:2]}")
-    print(f"Processed Local Absolute Images (First 2): {processed_local_absolute_images[0:2]}")
-    print(f"Processed Local Relative Images (First 2): {processed_local_relative_images[0:2]}")

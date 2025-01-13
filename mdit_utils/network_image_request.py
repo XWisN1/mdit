@@ -1,12 +1,20 @@
 import os
 import requests
 from alive_progress import alive_bar
+import re
 
 class NetworkImageRequest:
     def __init__(self, image_infos):
         # 初始化，传入包含文件路径和图片URL的列表
         self.image_infos = image_infos
         self.mapping = self._download_images()
+
+    def clean_filename(self, filename):
+        # 去除文件名中的非法字符
+        filename = re.sub(r'[\\/*?:"<>|]', '', filename)
+        # 去除URL参数
+        filename = filename.split('?')[0]
+        return filename
 
     def _download_images(self):
         # 下载网络图片到指定目录，并记录url与本地图片的映射关系
@@ -23,6 +31,7 @@ class NetworkImageRequest:
                 md_file_path = image_info['md_file_path']
                 download_path = image_info['download_path']
                 image_name = os.path.basename(url)
+                image_name = self.clean_filename(image_name)
                 local_path = os.path.join(download_path, image_name)
                 
                 # 规范化路径
@@ -83,18 +92,3 @@ class NetworkImageRequest:
         return mapping
 
 # 示例用法
-if __name__ == "__main__":
-    processed_network_images = [
-        {'md_file_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\1Panel\\1Panel面板最新前台RCE漏洞(CVE-2024-39911).md', 
-         'md_image_line': '![image](https://sydgz2-1310358933.cos.ap-guangzhou.myqcloud.com/pic/202407190936858.png)', 
-         'image_path': 'https://sydgz2-1310358933.cos.ap-guangzhou.myqcloud.com/pic/202407190936858.png', 
-         'project_root': 'D:\\game\\xiao_tools\\POC-main\\POC-main', 
-         'download_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_download_images'},
-        {'md_file_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\1Panel\\1Panel面板最新前台RCE漏洞(CVE-2024-39911).md', 
-         'md_image_line': '![image](https://sydgz2-1310358933.cos.ap-guangzhou.myqcloud.com/pic/202407190936869.png)', 
-         'image_path': 'https://sydgz2-1310358933.cos.ap-guangzhou.myqcloud.com/pic/202407190936869.png', 
-         'project_root': 'D:\\game\\xiao_tools\\POC-main\\POC-main', 
-         'download_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_download_images'}
-    ]
-    network_image_request = NetworkImageRequest(processed_network_images)
-    print(network_image_request.mapping)

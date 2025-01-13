@@ -102,20 +102,3 @@ class LocalImageMover2:
 
 
 # 示例用法
-if __name__ == "__main__":
-    processed_local_images = [
-        {'md_file_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\短剧影视小程序\\短剧影视小程序前台未授权 漏洞.md', 
-         'md_image_line': '![image-20240902103321159](C:/Users/26927/AppData/Roaming/Typora/typora-user-images/image-20240902103321159.png)', 
-         'image_path': 'C:\\Users\\26927\\AppData\\Roaming\\Typora\\typora-user-images\\image-20240902103321159.png', 
-         'project_root': 'D:\\game\\xiao_tools\\POC-main\\POC-main', 
-         'move_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_movelocal_images'},
-        {'md_file_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\Apache\\Apache ActiveMQ远程命令执行漏洞.md', 
-         'md_image_line': '![](./assets/20231117150110.png)', 
-         'image_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\assets\\20231117150110.png', 
-         'project_root': 'D:\\game\\xiao_tools\\POC-main\\POC-main', 
-         'move_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_movelocal_images'}
-    ]
-    move_method = 'copy'  # 可以是 'copy', 'move', 'link', 'symlink'
-    local_image_mover = LocalImageMover1(processed_local_images, move_method)
-    print("Mapping:", local_image_mover.mapping)
-    print("Missing Images:", local_image_mover.missing_images)

@@ -77,33 +77,3 @@ class MarkdownImageReplacer:
         return os.path.relpath(target_path, start=os.path.dirname(file_path))
 
 # 示例用法
-if __name__ == "__main__":
-    network_mapping = [
-        {'md_file_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\1Panel\\1Panel面板最新前台RCE漏洞(CVE-2024-39911).md', 
-          'md_image_line': '![image](https://sydgz2-1310358933.cos.ap-guangzhou.myqcloud.com/pic/202407190936858.png)',
-            'image_path': 'https://sydgz2-1310358933.cos.ap-guangzhou.myqcloud.com/pic/202407190936858.png', 
-         'project_root': 'D:\\game\\xiao_tools\\POC-main\\POC-main', 
-         'download_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_download_images', 
-         'local_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_download_images\\202407190936858.png'}
-    ]
-
-    local_relative_mapping = [
-        {'md_file_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\Apache\\Apache ActiveMQ远程命令执行漏洞.md', 
-         'md_image_line': '![](./assets/20231117150110.png)', 
-         'image_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\assets\\20231117150110.png', 
-         'project_root': 'D:\\game\\xiao_tools\\POC-main\\POC-main', 
-         'move_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_movelocal_images', 
-         'moved_image_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_movelocal_images\\20231117150110.png'}
-    ]
-
-    local_absolute_mapping = [
-        {'md_file_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\短剧影视小程序\\短剧影视小程序前台未授权 漏洞.md', 
-         'md_image_line': '![image-20240902103321159](C:/Users/26927/AppData/Roaming/Typora/typora-user-images/image-20240902103321159.png)', 
-         'image_path': 'C:\\Users\\26927\\AppData\\Roaming\\Typora\\typora-user-images\\image-20240902103321159.png', 
-         'project_root': 'D:\\game\\xiao_tools\\POC-main\\POC-main', 
-         'move_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_movelocal_images', 
-         'moved_image_path': 'D:\\game\\xiao_tools\\POC-main\\POC-main\\[mdit]mdit[mdit]_movelocal_images\\image-20240902103321159.png'}
-    ]
-
-    replacer = MarkdownImageReplacer(network_mapping, local_relative_mapping, local_absolute_mapping)
-    print("Processed Data:", replacer.processed_data)
