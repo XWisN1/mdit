@@ -13,21 +13,27 @@ class ImageHandler:
         # 从markdown文件中提取指定类型的图片文件，返回json格式数据
         image_info = []
         for md_file in self.md_files:
-            with open(md_file, 'r', encoding='utf-8') as f:
-                content = f.read()
-                # 使用正则表达式匹配整个Markdown图片行
-                md_image_lines = re.findall(r'(!\[.*?\]\(.*?\))', content)
-                # 过滤出以指定图片类型结尾的图片行
-                # 过滤出以指定图片类型结尾的图片行，或括号内以 http/https 开头的行
-                filtered_md_image_lines = [
-                    line for line in md_image_lines
-                    if any(re.search(r'\((.*?)\)', line).group(1).endswith(img_type) for img_type in self.image_types)
-                    or re.search(r'\((.*?)\)', line).group(1).startswith(('http://', 'https://'))  # 新增逻辑
-]
-
-                # 仅当filtered_md_image_lines非空时，才添加到image_info列表
-                if filtered_md_image_lines:
-                    image_info.append({'md_file_path': md_file, 'md_images_lines': filtered_md_image_lines})
+            try:
+                with open(md_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    # 使用正则表达式匹配整个Markdown图片行
+                    md_image_lines = re.findall(r'(!\[.*?\]\(.*?\))', content)
+                    # 过滤出以指定图片类型结尾的图片行
+                    # 过滤出以指定图片类型结尾的图片行，或括号内以 http/https 开头的行
+                    filtered_md_image_lines = [
+                        line for line in md_image_lines
+                        if any(re.search(r'\((.*?)\)', line).group(1).endswith(img_type) for img_type in self.image_types)
+                        or re.search(r'\((.*?)\)', line).group(1).startswith(('http://', 'https://'))  # 新增逻辑
+                    ]
+                    # 仅当filtered_md_image_lines非空时，才添加到image_info列表
+                    if filtered_md_image_lines:
+                        image_info.append({'md_file_path': md_file, 'md_images_lines': filtered_md_image_lines})
+            except FileNotFoundError:
+                print(f"文件 '{md_file}' 不存在，请检查文件路径是否正确。如果文件曾存在但被安全软件删除，建议关闭安全软件后再执行。")
+            except PermissionError:
+                print(f"没有权限打开文件 '{md_file}' ，请检查文件权限。")
+            except OSError as e:
+                print(f"打开文件 '{md_file}' 时出现错误：{e}。请检查文件是否存在、路径是否正确以及是否有足够的权限访问该文件。")
         return image_info
 
     def separate_images(self):
